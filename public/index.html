@@ -1,0 +1,1858 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sistema ESCAPE - Engenharia de Sistemas UFMG</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --primary: #0066FF;
+      --secondary: #00D9FF;
+      --accent: #8B00FF;
+      --success: #00FF88;
+      --warning: #FF6B00;
+      --danger: #FF3366;
+      --dark: #1A1A2E;
+      --light: #F0F4FF;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+      min-height: 100vh;
+      color: white;
+      overflow-x: hidden;
+    }
+
+    .particles {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    .particle {
+      position: absolute;
+      width: 2px;
+      height: 2px;
+      background: var(--secondary);
+      border-radius: 50%;
+      animation: float 20s infinite;
+      opacity: 0.3;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0) translateX(0); }
+      25% { transform: translateY(-100px) translateX(50px); }
+      50% { transform: translateY(-200px) translateX(-50px); }
+      75% { transform: translateY(-100px) translateX(100px); }
+    }
+
+    .container {
+      position: relative;
+      z-index: 1;
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    #welcome-screen {
+      text-align: center;
+      padding: 40px 20px;
+      animation: fadeIn 0.5s;
+    }
+
+    .logo {
+      font-size: 64px;
+      margin-bottom: 20px;
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.1); }
+    }
+
+    h1 {
+      font-size: 48px;
+      color: var(--secondary);
+      margin-bottom: 10px;
+      text-shadow: 0 0 20px rgba(0, 217, 255, 0.5);
+    }
+
+    .subtitle {
+      font-size: 18px;
+      color: #ccc;
+      margin-bottom: 30px;
+    }
+
+    .alert-box {
+      background: rgba(255, 107, 0, 0.2);
+      border: 2px solid var(--warning);
+      border-radius: 10px;
+      padding: 20px;
+      margin: 30px 0;
+      font-size: 18px;
+      animation: blink 2s infinite;
+    }
+
+    @keyframes blink {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.7; }
+    }
+
+    .input-group {
+      margin: 30px 0;
+    }
+
+    input[type="text"] {
+      width: 100%;
+      max-width: 400px;
+      padding: 15px 20px;
+      font-size: 18px;
+      border: 2px solid var(--secondary);
+      border-radius: 10px;
+      background: rgba(255, 255, 255, 0.1);
+      color: white;
+      text-align: center;
+      transition: all 0.3s;
+    }
+
+    input[type="text"]:focus {
+      outline: none;
+      background: rgba(255, 255, 255, 0.15);
+      box-shadow: 0 0 20px rgba(0, 217, 255, 0.5);
+    }
+
+    input[type="text"]::placeholder {
+      color: #999;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, var(--primary), var(--accent));
+      color: white;
+      border: none;
+      padding: 15px 40px;
+      font-size: 20px;
+      border-radius: 50px;
+      cursor: pointer;
+      transition: all 0.3s;
+      box-shadow: 0 5px 20px rgba(0, 102, 255, 0.4);
+      margin: 10px;
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 30px rgba(0, 102, 255, 0.6);
+    }
+
+    .btn-primary:active {
+      transform: translateY(0);
+    }
+
+    .btn-primary:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    #game-screen {
+      display: none;
+      animation: fadeIn 0.5s;
+    }
+
+    .game-header {
+      background: rgba(26, 26, 46, 0.8);
+      border-radius: 15px;
+      padding: 20px;
+      margin-bottom: 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 15px;
+    }
+
+    .stat {
+      text-align: center;
+    }
+
+    .stat-label {
+      font-size: 12px;
+      color: #999;
+      text-transform: uppercase;
+    }
+
+    .stat-value {
+      font-size: 24px;
+      font-weight: bold;
+      color: var(--secondary);
+    }
+
+    .timer {
+      font-size: 36px;
+      color: var(--success);
+      font-family: 'Courier New', monospace;
+    }
+
+    .timer.warning {
+      color: var(--warning);
+      animation: pulse 1s infinite;
+    }
+
+    .challenge-box {
+      background: rgba(26, 26, 46, 0.9);
+      border-radius: 15px;
+      padding: 30px;
+      margin-bottom: 20px;
+      border: 2px solid var(--primary);
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+    }
+
+    .challenge-number {
+      font-size: 14px;
+      color: var(--secondary);
+      margin-bottom: 10px;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+    }
+
+    .challenge-title {
+      font-size: 28px;
+      margin-bottom: 15px;
+      color: var(--secondary);
+    }
+
+    .scenario {
+      font-size: 16px;
+      line-height: 1.6;
+      color: #ddd;
+      margin-bottom: 25px;
+      padding: 15px;
+      background: rgba(0, 0, 0, 0.3);
+      border-left: 4px solid var(--warning);
+      border-radius: 5px;
+    }
+
+    .hint-text {
+      font-size: 14px;
+      color: var(--secondary);
+      margin-top: 15px;
+      padding: 10px;
+      background: rgba(0, 217, 255, 0.1);
+      border-radius: 5px;
+    }
+
+    .system-diagram {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 15px;
+      margin: 25px 0;
+    }
+
+    .component {
+      background: rgba(0, 102, 255, 0.1);
+      border: 2px solid rgba(0, 102, 255, 0.3);
+      border-radius: 10px;
+      padding: 15px;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.3s;
+      position: relative;
+    }
+
+    .component:hover {
+      transform: translateY(-5px);
+      border-color: var(--secondary);
+      box-shadow: 0 5px 20px rgba(0, 217, 255, 0.3);
+    }
+
+    .component.selected {
+      background: rgba(0, 217, 255, 0.2);
+      border-color: var(--secondary);
+      border-width: 3px;
+    }
+
+    .component-icon {
+      font-size: 36px;
+      margin-bottom: 10px;
+    }
+
+    .component-name {
+      font-size: 14px;
+      color: white;
+      margin-bottom: 8px;
+    }
+
+    .status-indicator {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      margin: 8px auto 0;
+      animation: pulse 2s infinite;
+    }
+
+    .status-normal {
+      background: var(--success);
+    }
+
+    .status-warning {
+      background: var(--warning);
+    }
+
+    .status-critical {
+      background: var(--danger);
+    }
+
+    .priority-list {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+      margin: 20px 0;
+    }
+
+    .priority-item {
+      background: rgba(0, 102, 255, 0.1);
+      border: 2px solid rgba(0, 102, 255, 0.3);
+      border-radius: 10px;
+      padding: 20px;
+      cursor: move;
+      transition: all 0.3s;
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+
+    .priority-item:hover {
+      border-color: var(--secondary);
+      transform: translateX(5px);
+    }
+
+    .priority-item.dragging {
+      opacity: 0.5;
+      transform: scale(0.95);
+    }
+
+    .drag-handle {
+      font-size: 24px;
+      color: var(--secondary);
+      cursor: grab;
+    }
+
+    .drag-handle:active {
+      cursor: grabbing;
+    }
+
+    .priority-content {
+      flex: 1;
+    }
+
+    .priority-title {
+      font-size: 18px;
+      font-weight: bold;
+      margin-bottom: 5px;
+    }
+
+    .priority-desc {
+      font-size: 14px;
+      color: #999;
+    }
+
+    .priority-number {
+      font-size: 24px;
+      font-weight: bold;
+      color: var(--secondary);
+      min-width: 30px;
+      text-align: center;
+    }
+    /* CONTINUA DO ARQUIVO ANTERIOR - COLE DEPOIS DA PARTE 1 */
+
+    .flow-puzzle {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin: 20px 0;
+    }
+
+    .flow-block {
+      background: rgba(0, 102, 255, 0.1);
+      border: 2px solid rgba(0, 102, 255, 0.3);
+      border-radius: 10px;
+      padding: 15px 20px;
+      cursor: move;
+      transition: all 0.3s;
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+
+    .flow-block:hover {
+      border-color: var(--secondary);
+    }
+
+    .flow-block.correct-position {
+      border-color: var(--success);
+      background: rgba(0, 255, 136, 0.1);
+    }
+
+    .flow-number {
+      font-size: 20px;
+      font-weight: bold;
+      color: var(--secondary);
+      min-width: 30px;
+    }
+
+    .flow-text {
+      flex: 1;
+      font-size: 16px;
+    }
+
+    .security-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 15px;
+      margin: 20px 0;
+    }
+
+    .security-pattern {
+      background: rgba(0, 0, 0, 0.4);
+      border: 2px solid rgba(0, 102, 255, 0.3);
+      border-radius: 10px;
+      padding: 15px;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+
+    .security-pattern:hover {
+      border-color: var(--secondary);
+      transform: scale(1.05);
+    }
+
+    .security-pattern.selected {
+      border-color: var(--secondary);
+      border-width: 3px;
+      background: rgba(0, 217, 255, 0.1);
+    }
+
+    .pattern-graph {
+      height: 100px;
+      background: linear-gradient(to right, #1a1a2e 0%, #1a1a2e 100%);
+      border-radius: 5px;
+      margin-bottom: 10px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .pattern-line {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: var(--secondary);
+    }
+
+    .pattern-label {
+      text-align: center;
+      font-size: 14px;
+      color: white;
+    }
+
+    .optimization-options {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 15px;
+      margin: 20px 0;
+    }
+
+    .option-card {
+      background: rgba(0, 102, 255, 0.1);
+      border: 2px solid rgba(0, 102, 255, 0.3);
+      border-radius: 10px;
+      padding: 20px;
+      cursor: pointer;
+      transition: all 0.3s;
+      position: relative;
+    }
+
+    .option-card:hover {
+      border-color: var(--secondary);
+      transform: translateY(-3px);
+    }
+
+    .option-card.selected {
+      border-color: var(--secondary);
+      border-width: 3px;
+      background: rgba(0, 217, 255, 0.2);
+    }
+
+    .option-card .checkbox {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      width: 24px;
+      height: 24px;
+      border: 2px solid var(--secondary);
+      border-radius: 5px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .option-card.selected .checkbox::after {
+      content: '✓';
+      color: var(--success);
+      font-size: 18px;
+      font-weight: bold;
+    }
+
+    .option-title {
+      font-size: 16px;
+      font-weight: bold;
+      margin-bottom: 8px;
+      color: white;
+    }
+
+    .option-desc {
+      font-size: 14px;
+      color: #999;
+    }
+
+    .feedback {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: rgba(0, 0, 0, 0.95);
+      border: 3px solid;
+      border-radius: 20px;
+      padding: 40px;
+      text-align: center;
+      z-index: 1000;
+      animation: popIn 0.3s;
+      min-width: 300px;
+    }
+
+    @keyframes popIn {
+      0% { transform: translate(-50%, -50%) scale(0.5); opacity: 0; }
+      100% { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+    }
+
+    .feedback.success {
+      border-color: var(--success);
+    }
+
+    .feedback.error {
+      border-color: var(--danger);
+    }
+
+    .feedback-icon {
+      font-size: 64px;
+      margin-bottom: 20px;
+    }
+
+    .feedback-text {
+      font-size: 24px;
+      margin-bottom: 15px;
+    }
+
+    .feedback-points {
+      font-size: 32px;
+      color: var(--secondary);
+      font-weight: bold;
+    }
+
+    #results-screen {
+      display: none;
+      text-align: center;
+      padding: 20px;
+      animation: fadeIn 0.5s;
+    }
+
+    .results-header {
+      margin-bottom: 40px;
+    }
+
+    .results-header h2 {
+      font-size: 42px;
+      color: var(--success);
+      margin-bottom: 15px;
+    }
+
+    .score-display {
+      font-size: 72px;
+      color: var(--secondary);
+      font-weight: bold;
+      text-shadow: 0 0 30px rgba(0, 217, 255, 0.6);
+      margin: 20px 0;
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 20px;
+      margin: 30px 0;
+    }
+
+    .stat-card {
+      background: rgba(26, 26, 46, 0.8);
+      border-radius: 15px;
+      padding: 20px;
+      border: 2px solid var(--primary);
+    }
+
+    .stat-card-label {
+      font-size: 14px;
+      color: #999;
+      margin-bottom: 10px;
+    }
+
+    .stat-card-value {
+      font-size: 32px;
+      color: var(--secondary);
+      font-weight: bold;
+    }
+
+    .certificate-box {
+      background: linear-gradient(135deg, rgba(0, 102, 255, 0.2), rgba(139, 0, 255, 0.2));
+      border: 3px solid var(--secondary);
+      border-radius: 20px;
+      padding: 40px;
+      margin: 30px 0;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .certificate-box::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+      animation: shine 3s infinite;
+    }
+
+    @keyframes shine {
+      0% { transform: translateX(-100%) translateY(-100%) rotate(45deg); }
+      100% { transform: translateX(100%) translateY(100%) rotate(45deg); }
+    }
+
+    .certificate-content {
+      position: relative;
+      z-index: 1;
+    }
+
+    .certificate-badge {
+      font-size: 72px;
+      margin-bottom: 20px;
+    }
+
+    .certificate-title {
+      font-size: 32px;
+      color: var(--secondary);
+      margin-bottom: 15px;
+    }
+
+    .certificate-name {
+      font-size: 28px;
+      color: white;
+      margin: 20px 0;
+      font-weight: bold;
+    }
+
+    .profile-description {
+      font-size: 16px;
+      color: #ddd;
+      line-height: 1.6;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    .meme-section {
+      background: rgba(0, 0, 0, 0.5);
+      border-radius: 15px;
+      padding: 30px;
+      margin: 30px 0;
+    }
+
+    .meme-content {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 20px;
+    }
+
+    .meme-image {
+      font-size: 120px;
+      filter: drop-shadow(0 0 20px rgba(0, 217, 255, 0.5));
+    }
+
+    .meme-text {
+      font-size: 20px;
+      color: white;
+      text-align: center;
+      font-weight: bold;
+    }
+
+    .meme-explanation {
+      font-size: 16px;
+      color: #ddd;
+      line-height: 1.6;
+      max-width: 600px;
+    }
+
+    .info-section {
+      background: rgba(26, 26, 46, 0.9);
+      border-radius: 15px;
+      padding: 30px;
+      margin: 30px 0;
+      text-align: left;
+    }
+
+    .info-section h3 {
+      color: var(--secondary);
+      font-size: 24px;
+      margin-bottom: 15px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .info-section p {
+      color: #ddd;
+      line-height: 1.6;
+      margin-bottom: 15px;
+    }
+
+    .info-section ul {
+      list-style: none;
+      padding-left: 0;
+    }
+
+    .info-section li {
+      color: #ddd;
+      padding: 8px 0;
+      padding-left: 25px;
+      position: relative;
+    }
+
+    .info-section li::before {
+      content: '▸';
+      position: absolute;
+      left: 0;
+      color: var(--secondary);
+      font-size: 18px;
+    }
+
+    .ranking-mini {
+      background: rgba(26, 26, 46, 0.8);
+      border-radius: 15px;
+      padding: 25px;
+      margin: 30px 0;
+    }
+
+    .ranking-mini h3 {
+      color: var(--secondary);
+      margin-bottom: 20px;
+      font-size: 24px;
+    }
+
+    .ranking-item {
+      display: flex;
+      align-items: center;
+      padding: 12px;
+      margin-bottom: 10px;
+      background: rgba(0, 102, 255, 0.1);
+      border-radius: 8px;
+      gap: 15px;
+    }
+
+    .ranking-position {
+      font-size: 20px;
+      font-weight: bold;
+      color: var(--secondary);
+      min-width: 30px;
+    }
+
+    .ranking-name {
+      flex: 1;
+      font-size: 16px;
+    }
+
+    .ranking-score {
+      font-size: 18px;
+      font-weight: bold;
+      color: var(--success);
+    }
+
+    .btn-secondary {
+      background: rgba(255, 255, 255, 0.1);
+      border: 2px solid var(--secondary);
+      color: white;
+      padding: 12px 30px;
+      font-size: 16px;
+      border-radius: 50px;
+      cursor: pointer;
+      transition: all 0.3s;
+      margin: 10px;
+    }
+
+    .btn-secondary:hover {
+      background: rgba(0, 217, 255, 0.2);
+      transform: translateY(-2px);
+    }
+
+    @media (max-width: 768px) {
+      h1 { font-size: 36px; }
+      .logo { font-size: 48px; }
+      .score-display { font-size: 48px; }
+      .certificate-badge { font-size: 48px; }
+      .meme-image { font-size: 80px; }
+      .challenge-title { font-size: 22px; }
+      .system-diagram { grid-template-columns: repeat(2, 1fr); }
+      .game-header { flex-direction: column; }
+    }
+
+    .loading {
+      display: inline-block;
+      animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+  </style>
+</head>
+<body>
+  <div class="particles" id="particles"></div>
+  
+  <div class="container">
+    <!-- TELA INICIAL -->
+    <div id="welcome-screen">
+      <div class="logo">🎮</div>
+      <h1>SISTEMA ESCAPE</h1>
+      <p class="subtitle">Engenharia de Sistemas | UFMG</p>
+      
+      <div class="alert-box">
+        🚨 <strong>ALERTA CRÍTICO</strong> 🚨<br>
+        Sistema de Controle em Colapso!<br>
+        Você tem 5 minutos para salvar tudo.
+      </div>
+      
+      <div class="input-group">
+        <input 
+          type="text" 
+          id="playerName" 
+          placeholder="Digite seu nome" 
+          maxlength="30"
+          autocomplete="off"
+        >
+      </div>
+      
+      <button class="btn-primary" id="startButton" disabled>
+        INICIAR MISSÃO
+      </button>
+      
+      <p style="margin-top: 20px; color: #999; font-size: 14px;">
+        5 desafios • 5 minutos • Ranking ao vivo
+      </p>
+    </div>
+    <!-- CONTINUA DO ARQUIVO ANTERIOR - COLE DEPOIS DA PARTE 2 -->
+
+    <!-- TELA DE JOGO -->
+    <div id="game-screen">
+      <div class="game-header">
+        <div class="stat">
+          <div class="stat-label">Desafio</div>
+          <div class="stat-value" id="currentChallenge">1/5</div>
+        </div>
+        <div class="stat">
+          <div class="stat-label">Tempo</div>
+          <div class="timer" id="timer">5:00</div>
+        </div>
+        <div class="stat">
+          <div class="stat-label">Pontos</div>
+          <div class="stat-value" id="scoreDisplay">0</div>
+        </div>
+      </div>
+
+      <!-- DESAFIO 1: Identificação do Problema -->
+      <div id="challenge1" class="challenge-box">
+        <div class="challenge-number">DESAFIO 1 DE 5</div>
+        <h2 class="challenge-title">🔍 Identificação do Problema</h2>
+        <p class="scenario">
+          O sistema de controle da Central de Distribuição Inteligente entrou em colapso! 
+          Identifique o componente que está causando o efeito cascata.
+        </p>
+        
+        <div class="system-diagram">
+          <div class="component" data-component="gateway">
+            <div class="component-icon">🌐</div>
+            <div class="component-name">Gateway</div>
+            <div class="status-indicator status-normal"></div>
+          </div>
+          <div class="component" data-component="database">
+            <div class="component-icon">💾</div>
+            <div class="component-name">Database</div>
+            <div class="status-indicator status-warning"></div>
+          </div>
+          <div class="component" data-component="api">
+            <div class="component-icon">🔌</div>
+            <div class="component-name">API Core</div>
+            <div class="status-indicator status-critical"></div>
+          </div>
+          <div class="component" data-component="cache">
+            <div class="component-icon">⚡</div>
+            <div class="component-name">Cache</div>
+            <div class="status-indicator status-warning"></div>
+          </div>
+          <div class="component" data-component="frontend">
+            <div class="component-icon">🖥️</div>
+            <div class="component-name">Frontend</div>
+            <div class="status-indicator status-warning"></div>
+          </div>
+          <div class="component" data-component="auth">
+            <div class="component-icon">🔐</div>
+            <div class="component-name">Auth</div>
+            <div class="status-indicator status-normal"></div>
+          </div>
+          <div class="component" data-component="logging">
+            <div class="component-icon">📊</div>
+            <div class="component-name">Logging</div>
+            <div class="status-indicator status-normal"></div>
+          </div>
+          <div class="component" data-component="backup">
+            <div class="component-icon">💿</div>
+            <div class="component-name">Backup</div>
+            <div class="status-indicator status-normal"></div>
+          </div>
+        </div>
+        
+        <p class="hint-text">
+          💡 Dica: Pense em qual componente, ao falhar, causaria problemas em cascata nos outros...
+        </p>
+        
+        <button class="btn-primary" id="confirmC1">Confirmar Seleção</button>
+      </div>
+
+      <!-- DESAFIO 2: Priorização -->
+      <div id="challenge2" class="challenge-box" style="display: none;">
+        <div class="challenge-number">DESAFIO 2 DE 5</div>
+        <h2 class="challenge-title">⚖️ Priorização de Sistemas</h2>
+        <p class="scenario">
+          Três sistemas críticos falhando simultaneamente! Você precisa definir a ordem de restauração.
+          Arraste os cards para reorganizar a prioridade.
+        </p>
+        
+        <div class="priority-list" id="priorityList">
+          <div class="priority-item" draggable="true" data-system="hospital">
+            <span class="drag-handle">☰</span>
+            <div class="priority-content">
+              <div class="priority-title">🏥 Sistema Hospitalar</div>
+              <div class="priority-desc">Controle de UTIs, estoque de medicamentos e cirurgias</div>
+            </div>
+            <span class="priority-number">1</span>
+          </div>
+          <div class="priority-item" draggable="true" data-system="banco">
+            <span class="drag-handle">☰</span>
+            <div class="priority-content">
+              <div class="priority-title">🏦 Sistema Bancário</div>
+              <div class="priority-desc">Transações financeiras e pagamentos digitais</div>
+            </div>
+            <span class="priority-number">2</span>
+          </div>
+          <div class="priority-item" draggable="true" data-system="transporte">
+            <span class="drag-handle">☰</span>
+            <div class="priority-content">
+              <div class="priority-title">🚇 Sistema de Transporte Público</div>
+              <div class="priority-desc">Controle de metrô, ônibus e semáforos</div>
+            </div>
+            <span class="priority-number">3</span>
+          </div>
+        </div>
+        
+        <p class="hint-text">
+          💡 Dica: Considere impacto humano, dependências entre sistemas e urgência.
+        </p>
+        
+        <button class="btn-primary" id="confirmC2">Confirmar Ordem</button>
+      </div>
+
+      <!-- DESAFIO 3: Modelagem de Fluxo -->
+      <div id="challenge3" class="challenge-box" style="display: none;">
+        <div class="challenge-number">DESAFIO 3 DE 5</div>
+        <h2 class="challenge-title">📊 Modelagem de Fluxo</h2>
+        <p class="scenario">
+          O processo de autenticação está quebrado! Reorganize as etapas na ordem lógica correta.
+          Arraste os blocos para a sequência correta.
+        </p>
+        
+        <div class="flow-puzzle" id="flowPuzzle">
+          <div class="flow-block" draggable="true" data-order="1">
+            <span class="flow-number">A</span>
+            <span class="flow-text">Usuário insere credenciais</span>
+          </div>
+          <div class="flow-block" draggable="true" data-order="4">
+            <span class="flow-number">B</span>
+            <span class="flow-text">Sistema gera token de sessão</span>
+          </div>
+          <div class="flow-block" draggable="true" data-order="2">
+            <span class="flow-number">C</span>
+            <span class="flow-text">Validação no banco de dados</span>
+          </div>
+          <div class="flow-block" draggable="true" data-order="5">
+            <span class="flow-number">D</span>
+            <span class="flow-text">Usuário acessa sistema</span>
+          </div>
+          <div class="flow-block" draggable="true" data-order="3">
+            <span class="flow-number">E</span>
+            <span class="flow-text">Verificação de permissões</span>
+          </div>
+        </div>
+        
+        <p class="hint-text">
+          💡 Dica: Pense na sequência lógica desde a entrada do usuário até o acesso final.
+        </p>
+        
+        <button class="btn-primary" id="confirmC3">Confirmar Sequência</button>
+      </div>
+
+      <!-- DESAFIO 4: Segurança -->
+      <div id="challenge4" class="challenge-box" style="display: none;">
+        <div class="challenge-number">DESAFIO 4 DE 5</div>
+        <h2 class="challenge-title">🔒 Segurança e Integridade</h2>
+        <p class="scenario">
+          Padrões de acesso suspeitos detectados! Identifique qual representa um ataque real.
+        </p>
+        
+        <div class="security-grid">
+          <div class="security-pattern" data-pattern="normal">
+            <div class="pattern-graph">
+              <svg width="100%" height="100%" style="position: absolute;">
+                <polyline points="0,80 25,75 50,78 75,72 100,76" 
+                          fill="none" stroke="#00D9FF" stroke-width="2"/>
+              </svg>
+            </div>
+            <div class="pattern-label">Padrão A: Acesso Normal</div>
+          </div>
+          
+          <div class="security-pattern" data-pattern="attack">
+            <div class="pattern-graph">
+              <svg width="100%" height="100%" style="position: absolute;">
+                <polyline points="0,90 10,85 20,20 30,15 40,10 50,5 60,8 70,12 80,15 90,18 100,20" 
+                          fill="none" stroke="#FF3366" stroke-width="2"/>
+              </svg>
+            </div>
+            <div class="pattern-label">Padrão B: Ataque DDoS</div>
+          </div>
+          
+          <div class="security-pattern" data-pattern="maintenance">
+            <div class="pattern-graph">
+              <svg width="100%" height="100%" style="position: absolute;">
+                <polyline points="0,70 50,70 50,30 100,30" 
+                          fill="none" stroke="#00D9FF" stroke-width="2"/>
+              </svg>
+            </div>
+            <div class="pattern-label">Padrão C: Manutenção Programada</div>
+          </div>
+          
+          <div class="security-pattern" data-pattern="backup">
+            <div class="pattern-graph">
+              <svg width="100%" height="100%" style="position: absolute;">
+                <polyline points="0,85 20,85 20,40 40,40 40,85 60,85 60,40 80,40 80,85 100,85" 
+                          fill="none" stroke="#00D9FF" stroke-width="2"/>
+              </svg>
+            </div>
+            <div class="pattern-label">Padrão D: Backup Automático</div>
+          </div>
+        </div>
+        
+        <p class="hint-text">
+          💡 Dica: Ataques DDoS geralmente mostram picos súbitos e anormais de requisições.
+        </p>
+        
+        <button class="btn-primary" id="confirmC4">Confirmar Análise</button>
+      </div>
+
+      <!-- DESAFIO 5: Otimização -->
+      <div id="challenge5" class="challenge-box" style="display: none;">
+        <div class="challenge-number">DESAFIO 5 DE 5</div>
+        <h2 class="challenge-title">⚡ Otimização do Sistema</h2>
+        <p class="scenario">
+          Sistema restaurado, mas operando em 60% da capacidade. 
+          Escolha 3 ajustes para maximizar a performance.
+        </p>
+        
+        <div class="optimization-options">
+          <div class="option-card" data-option="cache">
+            <div class="checkbox"></div>
+            <div class="option-title">Cache Distribuído</div>
+            <div class="option-desc">Reduz carga no banco de dados em 40%</div>
+          </div>
+          
+          <div class="option-card" data-option="loadbalancer">
+            <div class="checkbox"></div>
+            <div class="option-title">Load Balancer</div>
+            <div class="option-desc">Distribui requisições entre servidores</div>
+          </div>
+          
+          <div class="option-card" data-option="compression">
+            <div class="checkbox"></div>
+            <div class="option-title">Compressão de Dados</div>
+            <div class="option-desc">Reduz tráfego de rede em 30%</div>
+          </div>
+          
+          <div class="option-card" data-option="cdn">
+            <div class="checkbox"></div>
+            <div class="option-title">CDN Global</div>
+            <div class="option-desc">Entrega conteúdo mais rápido aos usuários</div>
+          </div>
+          
+          <div class="option-card" data-option="indexing">
+            <div class="checkbox"></div>
+            <div class="option-title">Indexação de BD</div>
+            <div class="option-desc">Acelera consultas em 50%</div>
+          </div>
+          
+          <div class="option-card" data-option="monitoring">
+            <div class="checkbox"></div>
+            <div class="option-title">Monitoramento 24/7</div>
+            <div class="option-desc">Detecta problemas antes que afetem usuários</div>
+          </div>
+        </div>
+        
+        <p class="hint-text">
+          💡 Dica: Escolha soluções que impactam performance imediata, não apenas prevenção.
+        </p>
+        
+        <button class="btn-primary" id="confirmC5">Confirmar Otimizações</button>
+      </div>
+    </div>
+    <!-- CONTINUA DO ARQUIVO ANTERIOR - COLE DEPOIS DA PARTE 3 -->
+
+    <!-- TELA DE RESULTADOS -->
+    <div id="results-screen">
+      <div class="results-header">
+        <h2>🎯 MISSÃO CONCLUÍDA!</h2>
+        <div class="score-display" id="finalScore">0</div>
+        <p style="color: #999; font-size: 18px;">pontos</p>
+      </div>
+
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-card-label">Tempo Total</div>
+          <div class="stat-card-value" id="finalTime">0:00</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-card-label">Posição do Dia</div>
+          <div class="stat-card-value" id="dailyRank">#-</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-card-label">Ranking Geral</div>
+          <div class="stat-card-value" id="overallRank">#-</div>
+        </div>
+      </div>
+
+      <!-- CERTIFICADO -->
+      <div class="certificate-box">
+        <div class="certificate-content">
+          <div class="certificate-badge" id="profileBadge">🏆</div>
+          <h3 class="certificate-title">CERTIFICADO DE PERFIL</h3>
+          <div class="certificate-name" id="playerNameDisplay"></div>
+          <h4 id="profileTitle" style="color: var(--secondary); font-size: 24px; margin: 15px 0;"></h4>
+          <p class="profile-description" id="profileDescription"></p>
+        </div>
+      </div>
+
+      <!-- MEME + EXPLICAÇÃO -->
+      <div class="meme-section">
+        <div class="meme-content">
+          <div class="meme-image" id="memeIcon">🔥</div>
+          <div class="meme-text" id="memeText">Meme aqui</div>
+          <p class="meme-explanation" id="memeExplanation">Explicação aqui</p>
+        </div>
+      </div>
+
+      <!-- RANKING MINI -->
+      <div class="ranking-mini">
+        <h3>🏆 Top 5 do Dia</h3>
+        <div id="topRankings">
+          <div class="ranking-item">
+            <span class="ranking-position">-</span>
+            <span class="ranking-name">Carregando...</span>
+            <span class="ranking-score">-</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- INFORMAÇÕES DO CURSO -->
+      <div class="info-section">
+        <h3>📚 O QUE É ENGENHARIA DE SISTEMAS?</h3>
+        <p>
+          Área que projeta, integra e otimiza sistemas complexos, conectando tecnologia, gestão e inovação. 
+          Você aprende a resolver problemas reais que envolvem múltiplos componentes trabalhando juntos.
+        </p>
+      </div>
+
+      <div class="info-section">
+        <h3>💼 ONDE UM ENGENHEIRO DE SISTEMAS TRABALHA?</h3>
+        <ul>
+          <li>Empresas de tecnologia (Google, Amazon, Microsoft, startups)</li>
+          <li>Setor financeiro (bancos digitais, fintechs)</li>
+          <li>Indústria 4.0 e automação</li>
+          <li>Consultoria estratégica</li>
+          <li>Saúde (sistemas hospitalares, telemedicina)</li>
+          <li>Logística e supply chain</li>
+          <li>Governo e smart cities</li>
+          <li>Pesquisa e desenvolvimento</li>
+        </ul>
+      </div>
+
+      <div class="info-section">
+        <h3>🎓 SOBRE O CURSO NA UFMG</h3>
+        <p><strong>Duração:</strong> 5 anos (10 períodos)</p>
+        <p><strong>Perfil ideal:</strong> Gostar de tecnologia + raciocínio lógico + trabalhar com pessoas</p>
+        <p><strong>Não precisa:</strong> Ser "gênio em programação" — ES é sobre pensamento sistêmico!</p>
+      </div>
+
+      <div class="info-section">
+        <h3>🛠️ HABILIDADES QUE VOCÊ DESENVOLVE</h3>
+        <ul>
+          <li>Pensamento sistêmico e visão holística</li>
+          <li>Modelagem e simulação de sistemas</li>
+          <li>Otimização e tomada de decisão</li>
+          <li>Gestão de projetos complexos</li>
+          <li>Integração de tecnologias</li>
+          <li>Análise de dados e IA aplicada</li>
+          <li>Segurança e confiabilidade de sistemas</li>
+        </ul>
+      </div>
+
+      <div class="info-section">
+        <h3>💰 MERCADO E REMUNERAÇÃO</h3>
+        <p><strong>Mercado em alta:</strong> Crescimento de 22% previsto até 2030</p>
+        <p><strong>Salário inicial:</strong> R$ 7.000 - R$ 10.000</p>
+        <p><strong>Salário com experiência:</strong> R$ 15.000 - R$ 30.000+</p>
+        <p><strong>Empregabilidade:</strong> 94% dos formados empregados em 1 ano</p>
+      </div>
+
+      <div class="info-section">
+        <h3>🌟 EXEMPLOS REAIS DE SISTEMAS</h3>
+        <ul>
+          <li>Como o Uber integra motoristas, passageiros, pagamentos e GPS</li>
+          <li>Sistemas de recomendação da Netflix e Spotify</li>
+          <li>Bancos digitais sem agências físicas</li>
+          <li>Controle de tráfego aéreo e ferroviário</li>
+          <li>Sistemas de saúde integrando hospitais, exames e prontuários</li>
+          <li>Cidades inteligentes (iluminação, trânsito, segurança integrados)</li>
+        </ul>
+      </div>
+
+      <div class="info-section">
+        <h3>📱 SIGA A ENGENHARIA DE SISTEMAS UFMG</h3>
+        <p><strong>Instagram:</strong> @es.ufmg</p>
+        <p><strong>Site:</strong> sistemas.ufmg.br</p>
+        <p><strong>Email:</strong> contato.es@ufmg.br</p>
+      </div>
+
+      <div style="text-align: center; margin-top: 40px;">
+        <button class="btn-primary" onclick="location.reload()">
+          🔄 Jogar Novamente
+        </button>
+        <button class="btn-secondary" onclick="window.print()">
+          📸 Salvar Certificado
+        </button>
+      </div>
+
+      <p style="text-align: center; color: #999; margin-top: 30px; font-size: 14px;">
+        Tire foto do certificado e marque @es.ufmg no Instagram! 📱✨
+      </p>
+    </div>
+  </div>
+  <!-- CONTINUA DO ARQUIVO ANTERIOR - COLE DEPOIS DA PARTE 4 -->
+
+  <script>
+    // ==================== VARIÁVEIS GLOBAIS ====================
+    let playerName = '';
+    let score = 0;
+    let currentChallenge = 1;
+    let startTime = null;
+    let timerInterval = null;
+    let timeRemaining = 300; // 5 minutos em segundos
+    let challengeStartTime = Date.now();
+
+    // ==================== PERFIS DE ENGENHEIRO ====================
+    const profiles = {
+      analitico: {
+        badge: '🧠',
+        title: 'Engenheiro(a) Analítico(a)',
+        description: 'Você tem olhar aguçado para detalhes e capacidade de identificar causas raiz. Ideal para áreas como análise de dados, cibersegurança e diagnóstico de sistemas.'
+      },
+      estrategista: {
+        badge: '⚡',
+        title: 'Engenheiro(a) Estrategista',
+        description: 'Você pensa no todo e toma decisões inteligentes sob pressão. Perfeito(a) para gestão de projetos, consultoria estratégica e otimização de processos.'
+      },
+      solucionador: {
+        badge: '🔧',
+        title: 'Engenheiro(a) Solucionador(a)',
+        description: 'Você é versátil e eficiente na resolução de problemas complexos. Preparado(a) para atuar em qualquer frente da Engenharia de Sistemas.'
+      },
+      arquiteto: {
+        badge: '🏗️',
+        title: 'Engenheiro(a) Arquiteto(a) de Sistemas',
+        description: 'Você tem talento para estruturar processos e criar soluções organizadas. Ideal para design de sistemas, arquitetura de software e integração de plataformas.'
+      },
+      inteligente: {
+        badge: '🚀',
+        title: 'Engenheiro(a) de Sistemas Inteligentes',
+        description: 'Você combina raciocínio rápido com pensamento sistêmico. Pronto(a) para trabalhar com IA, automação, sistemas autônomos e inovação tecnológica.'
+      }
+    };
+
+    // ==================== MEMES ====================
+    const memes = [
+      {
+        icon: '🔥',
+        text: 'SISTEMAS ANTES: 🔥💀 | SISTEMAS DEPOIS: ✅😎',
+        explanation: 'Engenheiros de Sistemas transformam caos em ordem. Lidamos com problemas complexos e criamos soluções inteligentes que fazem tudo funcionar perfeitamente.'
+      },
+      {
+        icon: '🧠',
+        text: 'PROGRAMAR < DESENVOLVER < INTEGRAR <<< OTIMIZAR TUDO! 💥',
+        explanation: 'Engenharia de Sistemas é a evolução. Você pensa além do código — pensa em como TUDO se conecta e funciona junto de forma eficiente.'
+      },
+      {
+        icon: '🎯',
+        text: 'Trabalhar isolado ❌ | Ver o SISTEMA TODO funcionando ✅✅✅',
+        explanation: 'Em ES, você não trabalha isoladamente. Você conecta tecnologia, pessoas e processos para criar soluções completas que impactam o mundo real.'
+      }
+    ];
+
+    // ==================== PONTUAÇÕES DOS DESAFIOS ====================
+    let challengeScores = {
+      1: 0, // Identificação
+      2: 0, // Priorização
+      3: 0, // Modelagem
+      4: 0, // Segurança
+      5: 0  // Otimização
+    };
+
+    // ==================== INICIALIZAÇÃO ====================
+    document.addEventListener('DOMContentLoaded', () => {
+      createParticles();
+      setupEventListeners();
+    });
+
+    function createParticles() {
+      const particlesContainer = document.getElementById('particles');
+      for (let i = 0; i < 30; i++) {
+        const particle = document.createElement('div');
+        particle.className = 'particle';
+        particle.style.left = Math.random() * 100 + '%';
+        particle.style.top = Math.random() * 100 + '%';
+        particle.style.animationDelay = Math.random() * 20 + 's';
+        particlesContainer.appendChild(particle);
+      }
+    }
+
+    function setupEventListeners() {
+      // Input do nome
+      const nameInput = document.getElementById('playerName');
+      const startButton = document.getElementById('startButton');
+
+      nameInput.addEventListener('input', (e) => {
+        const name = e.target.value.trim();
+        startButton.disabled = name.length < 2;
+        if (name.length >= 2) {
+          startButton.textContent = `INICIAR MISSÃO, ${name.toUpperCase()}!`;
+        } else {
+          startButton.textContent = 'INICIAR MISSÃO';
+        }
+      });
+
+      nameInput.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter' && nameInput.value.trim().length >= 2) {
+          startGame();
+        }
+      });
+
+      startButton.addEventListener('click', startGame);
+
+      // Desafio 1: Identificação
+      setupChallenge1();
+      
+      // Desafio 2: Priorização
+      setupChallenge2();
+      
+      // Desafio 3: Modelagem
+      setupChallenge3();
+      
+      // Desafio 4: Segurança
+      setupChallenge4();
+      
+      // Desafio 5: Otimização
+      setupChallenge5();
+    }
+
+    // ==================== CONTROLE DO JOGO ====================
+    function startGame() {
+      playerName = document.getElementById('playerName').value.trim();
+      if (playerName.length < 2) return;
+
+      document.getElementById('welcome-screen').style.display = 'none';
+      document.getElementById('game-screen').style.display = 'block';
+
+      startTime = Date.now();
+      challengeStartTime = Date.now();
+      startTimer();
+    }
+
+    function startTimer() {
+      timerInterval = setInterval(() => {
+        timeRemaining--;
+        updateTimerDisplay();
+
+        if (timeRemaining <= 30) {
+          document.getElementById('timer').classList.add('warning');
+        }
+
+        if (timeRemaining <= 0) {
+          endGame();
+        }
+      }, 1000);
+    }
+
+    function updateTimerDisplay() {
+      const minutes = Math.floor(timeRemaining / 60);
+      const seconds = timeRemaining % 60;
+      document.getElementById('timer').textContent = 
+        `${minutes}:${seconds.toString().padStart(2, '0')}`;
+    }
+
+    function nextChallenge(next) {
+      // Esconder desafio atual
+      document.getElementById(`challenge${currentChallenge}`).style.display = 'none';
+      
+      currentChallenge = next;
+      
+      if (currentChallenge > 5) {
+        endGame();
+        return;
+      }
+
+      // Mostrar próximo desafio
+      document.getElementById(`challenge${currentChallenge}`).style.display = 'block';
+      document.getElementById('currentChallenge').textContent = `${currentChallenge}/5`;
+      
+      challengeStartTime = Date.now();
+    }
+
+    function showFeedback(isCorrect, points) {
+      const feedback = document.createElement('div');
+      feedback.className = `feedback ${isCorrect ? 'success' : 'error'}`;
+      feedback.innerHTML = `
+        <div class="feedback-icon">${isCorrect ? '✅' : '⚠️'}</div>
+        <div class="feedback-text">${isCorrect ? 'Correto!' : 'Parcialmente correto'}</div>
+        <div class="feedback-points">+${points} pontos</div>
+      `;
+      document.body.appendChild(feedback);
+
+      setTimeout(() => {
+        feedback.remove();
+      }, 1500);
+
+      score += points;
+      document.getElementById('scoreDisplay').textContent = score;
+    }
+
+    function getTimeBonus() {
+      // Bônus por velocidade (máximo 200 pontos)
+      const timeElapsed = (Date.now() - startTime) / 1000;
+      if (timeElapsed < 180) return 200; // Menos de 3 minutos
+      if (timeElapsed < 240) return 150; // 3-4 minutos
+      if (timeElapsed < 270) return 100; // 4-4.5 minutos
+      if (timeElapsed < 300) return 50;  // 4.5-5 minutos
+      return 0;
+    }
+
+    // ==================== DESAFIO 1: IDENTIFICAÇÃO ====================
+    function setupChallenge1() {
+      const components = document.querySelectorAll('#challenge1 .component');
+      let selectedComponent = null;
+
+      components.forEach(comp => {
+        comp.addEventListener('click', () => {
+          components.forEach(c => c.classList.remove('selected'));
+          comp.classList.add('selected');
+          selectedComponent = comp.dataset.component;
+        });
+      });
+
+      document.getElementById('confirmC1').addEventListener('click', () => {
+        if (!selectedComponent) {
+          alert('Selecione um componente primeiro!');
+          return;
+        }
+
+        const correct = selectedComponent === 'api';
+        const points = correct ? 100 : 50;
+        challengeScores[1] = points;
+
+        showFeedback(correct, points);
+        setTimeout(() => nextChallenge(2), 2000);
+      });
+    }
+    // CONTINUA DO ARQUIVO ANTERIOR - COLE DEPOIS DA PARTE 5
+
+    // ==================== DESAFIO 2: PRIORIZAÇÃO ====================
+    function setupChallenge2() {
+      const priorityList = document.getElementById('priorityList');
+      const items = priorityList.querySelectorAll('.priority-item');
+      
+      let draggedElement = null;
+
+      items.forEach(item => {
+        item.addEventListener('dragstart', (e) => {
+          draggedElement = item;
+          item.classList.add('dragging');
+        });
+
+        item.addEventListener('dragend', () => {
+          item.classList.remove('dragging');
+        });
+
+        item.addEventListener('dragover', (e) => {
+          e.preventDefault();
+          const afterElement = getDragAfterElement(priorityList, e.clientY);
+          if (afterElement == null) {
+            priorityList.appendChild(draggedElement);
+          } else {
+            priorityList.insertBefore(draggedElement, afterElement);
+          }
+          updatePriorityNumbers();
+        });
+      });
+
+      document.getElementById('confirmC2').addEventListener('click', () => {
+        const order = Array.from(priorityList.querySelectorAll('.priority-item'))
+          .map(item => item.dataset.system);
+        
+        // Resposta correta: hospital, transporte, banco
+        const correct = ['hospital', 'transporte', 'banco'];
+        let points = 0;
+        
+        if (order[0] === correct[0]) points += 60;
+        if (order[1] === correct[1]) points += 50;
+        if (order[2] === correct[2]) points += 40;
+        
+        challengeScores[2] = points;
+        showFeedback(points === 150, points);
+        setTimeout(() => nextChallenge(3), 2000);
+      });
+    }
+
+    function getDragAfterElement(container, y) {
+      const draggableElements = [...container.querySelectorAll('.priority-item:not(.dragging)')];
+
+      return draggableElements.reduce((closest, child) => {
+        const box = child.getBoundingClientRect();
+        const offset = y - box.top - box.height / 2;
+        
+        if (offset < 0 && offset > closest.offset) {
+          return { offset: offset, element: child };
+        } else {
+          return closest;
+        }
+      }, { offset: Number.NEGATIVE_INFINITY }).element;
+    }
+
+    function updatePriorityNumbers() {
+      const items = document.querySelectorAll('#priorityList .priority-item');
+      items.forEach((item, index) => {
+        item.querySelector('.priority-number').textContent = index + 1;
+      });
+    }
+
+    // ==================== DESAFIO 3: MODELAGEM ====================
+    function setupChallenge3() {
+      const flowPuzzle = document.getElementById('flowPuzzle');
+      const blocks = flowPuzzle.querySelectorAll('.flow-block');
+      
+      let draggedBlock = null;
+
+      blocks.forEach(block => {
+        block.addEventListener('dragstart', () => {
+          draggedBlock = block;
+          block.style.opacity = '0.5';
+        });
+
+        block.addEventListener('dragend', () => {
+          block.style.opacity = '1';
+        });
+
+        block.addEventListener('dragover', (e) => {
+          e.preventDefault();
+          const afterElement = getDragAfterElement(flowPuzzle, e.clientY);
+          if (afterElement == null) {
+            flowPuzzle.appendChild(draggedBlock);
+          } else {
+            flowPuzzle.insertBefore(draggedBlock, afterElement);
+          }
+        });
+      });
+
+      document.getElementById('confirmC3').addEventListener('click', () => {
+        const currentOrder = Array.from(flowPuzzle.querySelectorAll('.flow-block'))
+          .map(block => parseInt(block.dataset.order));
+        
+        const correctOrder = [1, 2, 3, 4, 5];
+        let correctPositions = 0;
+        
+        currentOrder.forEach((order, index) => {
+          if (order === correctOrder[index]) {
+            correctPositions++;
+          }
+        });
+        
+        const points = correctPositions * 30; // 30 pontos por posição correta
+        challengeScores[3] = points;
+        
+        showFeedback(correctPositions === 5, points);
+        setTimeout(() => nextChallenge(4), 2000);
+      });
+    }
+
+    // ==================== DESAFIO 4: SEGURANÇA ====================
+    function setupChallenge4() {
+      const patterns = document.querySelectorAll('#challenge4 .security-pattern');
+      let selectedPattern = null;
+
+      patterns.forEach(pattern => {
+        pattern.addEventListener('click', () => {
+          patterns.forEach(p => p.classList.remove('selected'));
+          pattern.classList.add('selected');
+          selectedPattern = pattern.dataset.pattern;
+        });
+      });
+
+      document.getElementById('confirmC4').addEventListener('click', () => {
+        if (!selectedPattern) {
+          alert('Selecione um padrão primeiro!');
+          return;
+        }
+
+        const correct = selectedPattern === 'attack';
+        const points = correct ? 200 : 100;
+        challengeScores[4] = points;
+
+        showFeedback(correct, points);
+        setTimeout(() => nextChallenge(5), 2000);
+      });
+    }
+
+    // ==================== DESAFIO 5: OTIMIZAÇÃO ====================
+    function setupChallenge5() {
+      const options = document.querySelectorAll('#challenge5 .option-card');
+      const selectedOptions = new Set();
+
+      options.forEach(option => {
+        option.addEventListener('click', () => {
+          const optionId = option.dataset.option;
+          
+          if (selectedOptions.has(optionId)) {
+            selectedOptions.delete(optionId);
+            option.classList.remove('selected');
+          } else {
+            if (selectedOptions.size < 3) {
+              selectedOptions.add(optionId);
+              option.classList.add('selected');
+            } else {
+              alert('Você já selecionou 3 opções! Desmarque uma para escolher outra.');
+            }
+          }
+        });
+      });
+
+      document.getElementById('confirmC5').addEventListener('click', () => {
+        if (selectedOptions.size !== 3) {
+          alert('Você precisa selecionar exatamente 3 opções!');
+          return;
+        }
+
+        // Melhores opções: cache, loadbalancer, indexing
+        const optimal = ['cache', 'loadbalancer', 'indexing'];
+        let points = 0;
+        
+        selectedOptions.forEach(opt => {
+          if (optimal.includes(opt)) {
+            points += 67; // ~200/3
+          } else {
+            points += 33;
+          }
+        });
+        
+        points = Math.round(points);
+        challengeScores[5] = points;
+
+        showFeedback(points >= 180, points);
+        setTimeout(() => endGame(), 2000);
+      });
+    }
+
+    // ==================== FIM DO JOGO ====================
+    async function endGame() {
+      clearInterval(timerInterval);
+      
+      const timeBonus = getTimeBonus();
+      const finalScore = score + timeBonus;
+      const totalTime = 300 - timeRemaining;
+
+      document.getElementById('game-screen').style.display = 'none';
+      document.getElementById('results-screen').style.display = 'block';
+
+      // Exibir pontuação
+      document.getElementById('finalScore').textContent = finalScore;
+      document.getElementById('finalTime').textContent = formatTime(totalTime);
+      document.getElementById('playerNameDisplay').textContent = playerName;
+
+      // Determinar perfil
+      const profile = determineProfile();
+      displayProfile(profile);
+
+      // Exibir meme aleatório
+      const randomMeme = memes[Math.floor(Math.random() * memes.length)];
+      document.getElementById('memeIcon').textContent = randomMeme.icon;
+      document.getElementById('memeText').textContent = randomMeme.text;
+      document.getElementById('memeExplanation').textContent = randomMeme.explanation;
+
+      // Salvar pontuação e carregar ranking
+      await saveScore(finalScore, totalTime, profile.title);
+      await loadRanking();
+    }
+
+    function determineProfile() {
+      // Lógica para determinar perfil baseado nos desafios
+      const c1 = challengeScores[1];
+      const c2 = challengeScores[2];
+      const c3 = challengeScores[3];
+      const c4 = challengeScores[4];
+      const c5 = challengeScores[5];
+
+      // Analítico: bom em desafios 1 e 4
+      if (c1 >= 80 && c4 >= 150) {
+        return profiles.analitico;
+      }
+
+      // Estrategista: bom em desafios 2 e 5
+      if (c2 >= 120 && c5 >= 150) {
+        return profiles.estrategista;
+      }
+
+      // Arquiteto: bom no desafio 3
+      if (c3 >= 120) {
+        return profiles.arquiteto;
+      }
+
+      // Inteligente: pontuação alta geral
+      if (score >= 600) {
+        return profiles.inteligente;
+      }
+
+      // Padrão: Solucionador
+      return profiles.solucionador;
+    }
+
+    function displayProfile(profile) {
+      document.getElementById('profileBadge').textContent = profile.badge;
+      document.getElementById('profileTitle').textContent = profile.title;
+      document.getElementById('profileDescription').textContent = profile.description;
+    }
+
+    function formatTime(seconds) {
+      const mins = Math.floor(seconds / 60);
+      const secs = seconds % 60;
+      return `${mins}:${secs.toString().padStart(2, '0')}`;
+    }
+
+    // ==================== API - RANKING ====================
+    async function saveScore(finalScore, time, profile) {
+      try {
+        const response = await fetch('/api/score', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            playerName,
+            score: finalScore,
+            time,
+            profile
+          })
+        });
+
+        const data = await response.json();
+        
+        if (data.success) {
+          document.getElementById('dailyRank').textContent = `#${data.dailyPosition}`;
+          document.getElementById('overallRank').textContent = `#${data.allTimePosition}`;
+        }
+      } catch (error) {
+        console.error('Erro ao salvar pontuação:', error);
+        document.getElementById('dailyRank').textContent = '#-';
+        document.getElementById('overallRank').textContent = '#-';
+      }
+    }
+
+    async function loadRanking() {
+      try {
+        const response = await fetch('/api/ranking');
+        const data = await response.json();
+
+        const topRankings = document.getElementById('topRankings');
+        topRankings.innerHTML = '';
+
+        if (data.daily.length === 0) {
+          topRankings.innerHTML = '<p style="text-align: center; color: #999;">Seja o primeiro a jogar hoje!</p>';
+          return;
+        }
+
+        data.daily.slice(0, 5).forEach((entry, index) => {
+          const item = document.createElement('div');
+          item.className = 'ranking-item';
+          item.innerHTML = `
+            <span class="ranking-position">${index + 1}</span>
+            <span class="ranking-name">${entry.playerName}</span>
+            <span class="ranking-score">${entry.score}</span>
+          `;
+          topRankings.appendChild(item);
+        });
+      } catch (error) {
+        console.error('Erro ao carregar ranking:', error);
+      }
+    }
+
+    // Auto-atualizar ranking a cada 10 segundos (se estiver na tela inicial)
+    setInterval(() => {
+      if (document.getElementById('welcome-screen').style.display !== 'none') {
+        // Não fazer nada se estiver na tela inicial
+      }
+    }, 10000);
+  </script>
+</body>
+</html>
