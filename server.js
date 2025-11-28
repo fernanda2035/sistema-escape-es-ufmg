@@ -5,7 +5,7 @@ const qrcode = require('qrcode');
 const os = require('os');
 
 const app = express();
-const PORT = 3000;
+const PORT = process.env.PORT || 3000; // ← IMPORTANTE PARA RENDER!
 
 // Middleware
 app.use(express.json());
@@ -30,7 +30,6 @@ function getLocalIP() {
   const interfaces = os.networkInterfaces();
   for (const name of Object.keys(interfaces)) {
     for (const iface of interfaces[name]) {
-      // Pular endereços internos e não IPv4
       if (iface.family === 'IPv4' && !iface.internal) {
         return iface.address;
       }
@@ -41,11 +40,22 @@ function getLocalIP() {
 
 // Gerar QR Code ao iniciar servidor
 async function generateQRCode() {
-  const localIP = getLocalIP();
-  const url = `http://${localIP}:${PORT}`;
+  // ========== MODIFICAÇÃO PARA RENDER ==========
+  // Detectar se está rodando no Render (produção)
+  const isProduction = process.env.NODE_ENV === 'production' || process.env.RENDER;
+  
+  let url;
+  if (isProduction) {
+    // URL FIXA do Render - usar em produção
+    url = process.env.RENDER_EXTERNAL_URL || 'https://sistema-escape-es-ufmg.onrender.com';
+  } else {
+    // URL local - usar em desenvolvimento
+    const localIP = getLocalIP();
+    url = `http://${localIP}:${PORT}`;
+  }
+  // ============================================
   
   try {
-    // Gerar QR Code como imagem
     const qrImage = await qrcode.toDataURL(url, {
       width: 300,
       margin: 2,
@@ -55,7 +65,6 @@ async function generateQRCode() {
       }
     });
     
-    // Salvar QR Code como arquivo HTML para impressão
     const qrHTML = `
 <!DOCTYPE html>
 <html lang="pt-BR">
@@ -171,9 +180,13 @@ async function generateQRCode() {
     console.log('\n╔════════════════════════════════════════════════╗');
     console.log('║     🎮 SISTEMA ESCAPE - SERVIDOR ATIVO 🎮     ║');
     console.log('╠════════════════════════════════════════════════╣');
-    console.log(`║  🌐 URL Local: ${url.padEnd(28)} ║`);
-    console.log(`║  🔌 Porta: ${PORT}                                 ║`);
-    console.log('║  📱 QR Code: Abra qrcode.html no navegador    ║');
+    console.log(`║  🌐 URL: ${url.padEnd(36)} ║`);
+    console.log(`║  🔌 Porta: ${PORT}${PORT < 1000 ? '    ' : '   '}                              ║`);
+    if (!isProduction) {
+      console.log('║  📱 QR Code: Abra qrcode.html no navegador    ║');
+    } else {
+      console.log('║  📱 QR Code: /qrcode.html                     ║');
+    }
     console.log('╚════════════════════════════════════════════════╝\n');
     
   } catch (err) {
@@ -414,7 +427,6 @@ app.get('/admin', (req, res) => {
   <script>
     async function loadData() {
       try {
-        // Carregar estatísticas
         const statsRes = await fetch('/api/stats');
         const stats = await statsRes.json();
         
@@ -423,7 +435,6 @@ app.get('/admin', (req, res) => {
         document.getElementById('avgScore').textContent = stats.avgScore;
         document.getElementById('avgTime').textContent = formatTime(stats.avgTime);
         
-        // Carregar ranking
         const rankingRes = await fetch('/api/ranking');
         const ranking = await rankingRes.json();
         
@@ -454,8 +465,6 @@ app.get('/admin', (req, res) => {
     }
     
     loadData();
-    
-    // Auto-refresh a cada 30 segundos
     setInterval(loadData, 30000);
   </script>
 </body>
