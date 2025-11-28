@@ -5,7 +5,7 @@ const qrcode = require('qrcode');
 const os = require('os');
 
 const app = express();
-const PORT = process.env.PORT || 3000; // ← IMPORTANTE PARA RENDER!
+const PORT = process.env.PORT || 3000;
 
 // Middleware
 app.use(express.json());
@@ -38,22 +38,16 @@ function getLocalIP() {
   return 'localhost';
 }
 
-// Gerar QR Code ao iniciar servidor
+// ============================================================
+// GERAR QR CODE - SEMPRE COM URL DO RENDER
+// ============================================================
 async function generateQRCode() {
-  // ========== MODIFICAÇÃO PARA RENDER ==========
-  // Detectar se está rodando no Render (produção)
-  const isProduction = process.env.NODE_ENV === 'production' || process.env.RENDER;
+  // URL FIXA - SEMPRE USA O RENDER
+  const url = 'https://sistema-escape-es-ufmg.onrender.com';
   
-  let url;
-  if (isProduction) {
-    // URL FIXA do Render - usar em produção
-    url = process.env.RENDER_EXTERNAL_URL || 'https://sistema-escape-es-ufmg.onrender.com';
-  } else {
-    // URL local - usar em desenvolvimento
-    const localIP = getLocalIP();
-    url = `http://${localIP}:${PORT}`;
-  }
-  // ============================================
+  // Se quiser testar localmente, comente a linha acima e descomente abaixo:
+  // const localIP = getLocalIP();
+  // const url = `http://${localIP}:${PORT}`;
   
   try {
     const qrImage = await qrcode.toDataURL(url, {
@@ -121,7 +115,7 @@ async function generateQRCode() {
       margin-top: 20px;
       font-family: 'Courier New', monospace;
       color: #0066FF;
-      font-size: 18px;
+      font-size: 16px;
       font-weight: bold;
       word-break: break-all;
     }
@@ -129,14 +123,34 @@ async function generateQRCode() {
       margin-top: 30px;
       color: #666;
       line-height: 1.6;
+      text-align: left;
     }
     .instructions strong {
       color: #0066FF;
+    }
+    .instructions p {
+      margin: 8px 0;
     }
     .footer {
       margin-top: 30px;
       color: #999;
       font-size: 14px;
+    }
+    .print-btn {
+      background: #0066FF;
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 8px;
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
+      margin-top: 20px;
+      transition: all 0.3s;
+    }
+    .print-btn:hover {
+      background: #0052cc;
+      transform: translateY(-2px);
     }
     @media print {
       body {
@@ -144,6 +158,9 @@ async function generateQRCode() {
       }
       .qr-container {
         box-shadow: none;
+      }
+      .print-btn {
+        display: none;
       }
     }
   </style>
@@ -163,12 +180,15 @@ async function generateQRCode() {
       <p><strong>📱 Como Participar:</strong></p>
       <p>1. Aponte a câmera do celular para o QR Code</p>
       <p>2. Clique no link que aparecer</p>
-      <p>3. Complete os desafios em 5 minutos</p>
+      <p>3. Complete os 5 desafios em até 5 minutos</p>
       <p>4. Ganhe seu certificado personalizado!</p>
     </div>
     
+    <button class="print-btn" onclick="window.print()">🖨️ Imprimir QR Code</button>
+    
     <div class="footer">
-      Mostra de Profissões UFMG 2025
+      Mostra de Profissões UFMG 2025<br>
+      Desenvolvido por: Luana Ferreira, Fernanda Souza e Milena Flávia
     </div>
   </div>
 </body>
@@ -177,17 +197,14 @@ async function generateQRCode() {
     
     fs.writeFileSync(path.join(__dirname, 'qrcode.html'), qrHTML);
     
-    console.log('\n╔════════════════════════════════════════════════╗');
-    console.log('║     🎮 SISTEMA ESCAPE - SERVIDOR ATIVO 🎮     ║');
-    console.log('╠════════════════════════════════════════════════╣');
-    console.log(`║  🌐 URL: ${url.padEnd(36)} ║`);
-    console.log(`║  🔌 Porta: ${PORT}${PORT < 1000 ? '    ' : '   '}                              ║`);
-    if (!isProduction) {
-      console.log('║  📱 QR Code: Abra qrcode.html no navegador    ║');
-    } else {
-      console.log('║  📱 QR Code: /qrcode.html                     ║');
-    }
-    console.log('╚════════════════════════════════════════════════╝\n');
+    console.log('\n╔════════════════════════════════════════════════════════════╗');
+    console.log('║        🎮 SISTEMA ESCAPE - SERVIDOR ATIVO 🎮              ║');
+    console.log('╠════════════════════════════════════════════════════════════╣');
+    console.log(`║  🌐 URL do Jogo: ${url.padEnd(42)}║`);
+    console.log(`║  🔌 Porta: ${PORT.toString().padEnd(49)}║`);
+    console.log('║  📱 QR Code: /qrcode.html                                 ║');
+    console.log('║  📊 Painel Admin: /admin                                  ║');
+    console.log('╚════════════════════════════════════════════════════════════╝\n');
     
   } catch (err) {
     console.error('Erro ao gerar QR Code:', err);
