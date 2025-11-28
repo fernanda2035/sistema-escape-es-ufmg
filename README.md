@@ -1,443 +1,494 @@
 # 🎮 Sistema ESCAPE - Engenharia de Sistemas UFMG
 
-**Escape Room Digital Interativo para Mostra de Profissões**
+**Escape Room Digital Gamificado para Mostra de Profissões 2025**
 
-Desenvolvido por: Luana Ferreira, Fernanda Souza Siqueira e Milena Flávia
-
----
-
-## 📋 Índice
-
-- [Sobre o Projeto](#sobre-o-projeto)
-- [Requisitos do Sistema](#requisitos-do-sistema)
-- [Instalação Passo a Passo](#instalação-passo-a-passo)
-- [Como Usar na Mostra](#como-usar-na-mostra)
-- [Estrutura do Projeto](#estrutura-do-projeto)
-- [Solução de Problemas](#solução-de-problemas)
-- [Customização](#customização)
+[![Deploy on Render](https://img.shields.io/badge/Deploy-Render-46E3B7?style=for-the-badge&logo=render)](https://sistema-escape-es-ufmg.onrender.com)
+[![Node.js](https://img.shields.io/badge/Node.js-18+-339933?style=for-the-badge&logo=node.js)](https://nodejs.org/)
+[![License](https://img.shields.io/badge/License-MIT-blue?style=for-the-badge)](LICENSE)
 
 ---
 
-## 🎯 Sobre o Projeto
+## 📖 Sobre o Projeto
 
-O Sistema ESCAPE é uma experiência interativa gamificada que apresenta o curso de Engenharia de Sistemas da UFMG para estudantes do ensino médio através de 5 desafios que simulam situações reais da profissão.
+O **Sistema ESCAPE** é uma experiência interativa desenvolvida para apresentar o curso de Engenharia de Sistemas da UFMG a estudantes do ensino médio durante a Mostra de Profissões. Através de gamificação e desafios práticos, os participantes vivenciam conceitos fundamentais da área de forma divertida e memorável.
 
-**Recursos principais:**
-- ✅ 5 desafios progressivos (Análise, Priorização, Modelagem, Segurança, Otimização)
-- ✅ Sistema de pontuação e ranking ao vivo
-- ✅ Certificado personalizado com perfil de engenheiro
-- ✅ Acesso via QR Code em rede local
-- ✅ Painel administrativo para monitores
-- ✅ Design responsivo (funciona em celular, tablet e computador)
+### 🎯 Objetivos
 
----
-
-## 💻 Requisitos do Sistema
-
-### Hardware Mínimo
-- **Servidor**: 1 computador/notebook com WiFi
-- **Para Participantes**: Smartphones com câmera ou tablets
-
-### Software Necessário
-- **Node.js** versão 14 ou superior ([Download aqui](https://nodejs.org/))
-- **Navegador moderno** (Chrome, Firefox, Safari, Edge)
-- **Roteador WiFi** ou cabo de rede
-
-### Conhecimentos Necessários
-- ✅ Básico de linha de comando (copiar/colar comandos)
-- ✅ Acesso à internet (apenas para instalação inicial)
-- ❌ NÃO precisa saber programar!
+- Despertar interesse genuíno pela Engenharia de Sistemas
+- Demonstrar conceitos do curso através de experiência prática
+- Proporcionar autodescoberta com certificados personalizados
+- Informar sobre o curso, mercado e oportunidades profissionais
 
 ---
 
-## 🚀 Instalação Passo a Passo
+## ✨ Funcionalidades
 
-### PASSO 1: Instalar Node.js
+### 🎲 5 Desafios Interativos
 
-#### No Windows:
-1. Acesse https://nodejs.org/
-2. Baixe a versão LTS (recomendada)
-3. Execute o instalador e clique em "Next" até finalizar
-4. Abra o **Prompt de Comando** (Win + R, digite `cmd`)
-5. Digite `node -v` e pressione Enter
-6. Se aparecer algo como `v18.17.0`, está instalado! ✅
+1. **🔍 Identificação do Problema** - Análise sistêmica de componentes
+2. **⚖️ Priorização de Sistemas** - Tomada de decisão sob pressão
+3. **📊 Modelagem de Fluxo** - Pensamento sistêmico aplicado
+4. **🔒 Segurança e Integridade** - Detecção de padrões de ataque
+5. **⚡ Otimização do Sistema** - Maximização de performance
 
-#### No macOS:
-1. Acesse https://nodejs.org/
-2. Baixe a versão LTS
-3. Execute o instalador
-4. Abra o **Terminal** (Cmd + Espaço, digite "Terminal")
-5. Digite `node -v` e pressione Enter
+### 🏆 Sistema de Gamificação
 
-#### No Linux (Ubuntu/Debian):
-```bash
-sudo apt update
-sudo apt install nodejs npm
-node -v
-```
+- **Pontuação dinâmica** (até 800 pontos + bônus de tempo)
+- **Ranking ao vivo** (do dia e geral)
+- **5 perfis de engenheiro** baseados em performance:
+  - 🧠 Engenheiro(a) Analítico(a)
+  - ⚡ Engenheiro(a) Estrategista
+  - 🔧 Engenheiro(a) Solucionador(a)
+  - 🏗️ Engenheiro(a) Arquiteto(a) de Sistemas
+  - 🚀 Engenheiro(a) de Sistemas Inteligentes
 
----
+### 📱 Recursos Adicionais
 
-### PASSO 2: Baixar o Projeto
-
-**Opção A: Download Direto** (Mais Fácil)
-1. Baixe os arquivos do projeto em um .zip
-2. Extraia para uma pasta (exemplo: `C:\sistema-escape` ou `~/sistema-escape`)
-
-**Opção B: Git** (Se souber usar)
-```bash
-git clone [URL-DO-REPOSITORIO]
-cd sistema-escape
-```
+- **Certificado personalizado** compartilhável
+- **Memes educativos** sobre ES
+- **Informações completas** do curso (duração, mercado, salários)
+- **Painel administrativo** para monitores
+- **Acesso via QR Code** - sem necessidade de instalação
 
 ---
 
-### PASSO 3: Organizar os Arquivos
+## 🚀 Acesso Rápido
 
-Crie a seguinte estrutura de pastas:
+### URLs do Sistema
 
-```
-sistema-escape/
-│
-├── server.js              (arquivo do servidor)
-├── package.json           (configurações)
-├── README.md             (este arquivo)
-│
-└── public/               (criar esta pasta!)
-    └── index.html        (jogo principal)
-```
+| Página | URL | Descrição |
+|--------|-----|-----------|
+| 🎮 **Jogo** | [sistema-escape-es-ufmg.onrender.com](https://sistema-escape-es-ufmg.onrender.com) | Experiência principal |
+| 📱 **QR Code** | [/qrcode.html](https://sistema-escape-es-ufmg.onrender.com/qrcode.html) | Para impressão |
+| 📊 **Painel Admin** | [/admin](https://sistema-escape-es-ufmg.onrender.com/admin) | Estatísticas e ranking |
 
-**IMPORTANTE**: Coloque o arquivo `index.html` (o jogo) dentro de uma pasta chamada `public`.
+### Como Participar
+
+1. **Aponte a câmera** do celular para o QR Code
+2. **Clique no link** que aparecer
+3. **Digite seu nome** e inicie a missão
+4. **Complete os 5 desafios** em até 5 minutos
+5. **Receba seu certificado** personalizado!
 
 ---
 
-### PASSO 4: Instalar Dependências
+## 💻 Instalação Local
 
-1. Abra o **Terminal/Prompt de Comando**
-2. Navegue até a pasta do projeto:
+### Pré-requisitos
+
+- [Node.js](https://nodejs.org/) 18+ instalado
+- Git (opcional)
+
+### Passo a Passo
 
 ```bash
-# Windows
-cd C:\sistema-escape
+# 1. Clonar repositório
+git clone https://github.com/SEU-USUARIO/sistema-escape-es-ufmg.git
+cd sistema-escape-es-ufmg
 
-# macOS/Linux
-cd ~/sistema-escape
-```
-
-3. Instale as dependências:
-
-```bash
+# 2. Instalar dependências
 npm install
-```
 
-Aguarde... Vai baixar alguns arquivos (Express e QRCode). ⏳
-
-Quando terminar, você verá uma pasta nova chamada `node_modules`. ✅
-
----
-
-### PASSO 5: Conectar à Rede Local
-
-#### Opção A: WiFi (Recomendado)
-1. Conecte o computador servidor à rede WiFi local
-2. Anote o nome da rede WiFi (SSID)
-3. **Importante**: Todos os dispositivos devem estar na MESMA rede WiFi
-
-#### Opção B: Criar Hotspot
-1. No computador servidor, crie um ponto de acesso:
-   - **Windows 10/11**: Configurações > Rede > Hotspot Móvel
-   - **macOS**: Preferências > Compartilhamento > Compartilhamento de Internet
-2. Defina um nome e senha
-3. Conecte os celulares/tablets a esse hotspot
-
----
-
-### PASSO 6: Iniciar o Servidor
-
-No terminal, dentro da pasta do projeto, execute:
-
-```bash
+# 3. Iniciar servidor
 npm start
 ```
 
-Você verá algo assim:
+### Acesso Local
 
-```
-╔════════════════════════════════════════════════╗
-║     🎮 SISTEMA ESCAPE - SERVIDOR ATIVO 🎮     ║
-╠════════════════════════════════════════════════╣
-║  🌐 URL Local: http://192.168.0.105:3000      ║
-║  🔌 Porta: 3000                                ║
-║  📱 QR Code: Abra qrcode.html no navegador    ║
-╚════════════════════════════════════════════════╝
-```
-
-**✅ Servidor está rodando!**
+- **Jogo:** http://localhost:3000
+- **QR Code:** http://localhost:3000/qrcode.html
+- **Admin:** http://localhost:3000/admin
 
 ---
 
-### PASSO 7: Gerar e Imprimir QR Code
+## 🌐 Deploy no Render.com
 
-1. No servidor, abra o navegador
-2. Acesse: `http://localhost:3000/qrcode.html`
-3. Você verá um QR Code bonito na tela! 📱
-4. Imprima ou mostre na tela
+### Deploy Rápido
 
-**Dica**: Você pode imprimir vários QR Codes ou colocar em um cartaz!
+[![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com)
 
----
+### Passo a Passo Manual
 
-## 🎪 Como Usar na Mostra
-
-### Setup da Sala (30 minutos antes)
-
-1. **Equipamentos necessários:**
-   - ✅ 1 computador (servidor)
-   - ✅ 1 TV grande ou projetor (para ranking ao vivo)
-   - ✅ Roteador WiFi ou hotspot ativo
-   - ✅ QR Code impresso ou em cartaz
-   - ✅ Luzes LED (opcional, para ambientação)
-
-2. **Configuração:**
-   ```bash
-   # No computador servidor
-   cd sistema-escape
-   npm start
+1. **Criar conta no Render:** https://render.com
+2. **New Web Service** → Conectar GitHub
+3. **Configurações:**
    ```
+   Name: sistema-escape-es-ufmg
+   Environment: Node
+   Build Command: npm install
+   Start Command: npm start
+   ```
+4. **Variável de Ambiente:**
+   ```
+   NODE_ENV=production
+   ```
+5. **Deploy!** 🚀
 
-3. **Na TV/Projetor:**
-   - Abra o navegador
-   - Acesse: `http://localhost:3000`
-   - Deixe na tela inicial (mostra ranking ao vivo)
+### Manter Servidor Ativo (Free Tier)
 
-4. **Para Monitores:**
-   - Abra: `http://localhost:3000/admin`
-   - Painel mostra estatísticas em tempo real
+O plano gratuito do Render "dorme" após 15min de inatividade. Para manter ativo:
 
-### Fluxo de Atendimento
+**Opção 1: UptimeRobot**
+1. Criar conta em https://uptimerobot.com
+2. Add Monitor → HTTP(s)
+3. URL: `https://sistema-escape-es-ufmg.onrender.com`
+4. Interval: Every 5 minutes
 
-**Quando um estudante chegar:**
-
-1. Monitor: "E aí, preparado(a) para salvar um sistema em colapso? Você tem 5 minutos!"
-
-2. Estudante aponta celular para QR Code
-
-3. Jogo abre automaticamente no celular
-
-4. Estudante completa os desafios
-
-5. Ao finalizar, aparece:
-   - Pontuação
-   - Posição no ranking
-   - Certificado personalizado
-   - Informações do curso
-
-6. Monitor: "Parabéns! Quer tirar foto do certificado? Segue a gente no Instagram @es.ufmg!"
-
-### Dicas para Monitores
-
-✅ **Faça:**
-- Deixe os estudantes jogarem sozinhos (não dê respostas!)
-- Incentive competição saudável: "Olha o ranking, você consegue entrar no Top 5!"
-- Tire fotos dos estudantes com certificado
-- Explique o curso DEPOIS do jogo (quando eles já estão interessados)
-
-❌ **Evite:**
-- Ficar explicando muito antes do jogo (perde o impacto)
-- Dar respostas dos desafios
-- Apressar os estudantes
+**Opção 2: Upgrade para Starter** ($7/mês)
+- Servidor nunca dorme
+- Resposta instantânea
+- Recomendado para dia do evento
 
 ---
 
-## 📁 Estrutura do Projeto
+## 📂 Estrutura do Projeto
 
 ```
-sistema-escape/
+sistema-escape-es-ufmg/
 │
-├── server.js                 # Servidor Node.js + API
-├── package.json              # Dependências do projeto
-├── qrcode.html              # QR Code (gerado automaticamente)
-├── node_modules/            # Bibliotecas (não modificar)
+├── server.js              # Servidor Express + API + QR Code
+├── package.json           # Dependências e scripts
+├── .gitignore            # Arquivos ignorados pelo Git
+├── README.md             # Este arquivo
 │
 └── public/
-    └── index.html           # Jogo principal (frontend)
+    └── index.html        # Frontend completo (HTML+CSS+JS)
 ```
 
-### Arquivos Importantes
+### Tecnologias Utilizadas
 
-- **server.js**: Servidor, ranking, geração de QR Code
-- **public/index.html**: Jogo completo (HTML + CSS + JavaScript)
-- **qrcode.html**: Página com QR Code para acesso
+#### Backend
+- **Node.js** - Runtime JavaScript
+- **Express.js** - Framework web minimalista
+- **QRCode** - Geração de QR codes
+
+#### Frontend
+- **HTML5** - Estrutura
+- **CSS3** - Design responsivo e animações
+- **Vanilla JavaScript** - Lógica e interatividade
+
+#### Deploy
+- **Render.com** - Hospedagem gratuita
+- **GitHub** - Versionamento
+
+---
+
+## 🎨 Personalização
+
+### Mudar URL do QR Code
+
+Edite `server.js`, linha ~45:
+
+```javascript
+async function generateQRCode() {
+  const url = 'https://SEU-DOMINIO-AQUI.com';
+  // ...
+}
+```
+
+### Ajustar Dificuldade
+
+Edite `public/index.html`:
+
+```javascript
+// Tempo por desafio (em segundos)
+let timeRemaining = 300; // 5 minutos
+
+// Pontuação dos desafios
+const challengeScores = {
+  1: 100,  // Identificação
+  2: 150,  // Priorização
+  3: 150,  // Modelagem
+  4: 200,  // Segurança
+  5: 200   // Otimização
+};
+```
+
+### Personalizar Cores
+
+Edite `public/index.html`, variáveis CSS:
+
+```css
+:root {
+  --primary: #0066FF;      /* Azul principal */
+  --secondary: #00D9FF;    /* Ciano */
+  --accent: #8B00FF;       /* Roxo */
+  --success: #00FF88;      /* Verde */
+  --warning: #FF6B00;      /* Laranja */
+}
+```
+
+---
+
+## 📊 API Endpoints
+
+### GET `/api/ranking`
+
+Retorna ranking do dia e geral.
+
+**Resposta:**
+```json
+{
+  "daily": [...],
+  "allTime": [...],
+  "totalPlayers": 150,
+  "todayPlayers": 45
+}
+```
+
+### POST `/api/score`
+
+Salva pontuação do jogador.
+
+**Body:**
+```json
+{
+  "playerName": "João Silva",
+  "score": 687,
+  "time": 263,
+  "profile": "Engenheiro(a) Estrategista"
+}
+```
+
+**Resposta:**
+```json
+{
+  "success": true,
+  "dailyPosition": 8,
+  "allTimePosition": 47
+}
+```
+
+### GET `/api/stats`
+
+Retorna estatísticas gerais.
+
+**Resposta:**
+```json
+{
+  "totalPlayers": 150,
+  "todayPlayers": 45,
+  "avgScore": 587,
+  "avgTime": 245,
+  "profileCounts": {...},
+  "highestScore": 782
+}
+```
 
 ---
 
 ## 🔧 Solução de Problemas
 
-### Problema: "node: command not found"
-**Solução**: Node.js não está instalado ou não está no PATH.
-- Reinstale o Node.js
-- Reinicie o terminal/prompt
+### QR Code com URL Errada
 
-### Problema: "Porta 3000 já está em uso"
-**Solução**: Outra aplicação está usando a porta 3000.
-- Feche outros programas
-- Ou edite `server.js` e mude `const PORT = 3000` para `const PORT = 3001`
+**Problema:** QR Code aponta para localhost ou IP local
 
-### Problema: Celular não consegue acessar
-**Solução checklist**:
-1. ✅ Celular e servidor estão na MESMA rede WiFi?
-2. ✅ Firewall do Windows está bloqueando? (Desative temporariamente)
-3. ✅ Digite o IP correto mostrado no terminal
-4. ✅ Tente acessar pelo navegador primeiro: `http://[IP]:3000`
+**Solução:** Editar `server.js` e forçar URL fixa:
 
-### Problema: QR Code não funciona
-**Solução**:
-- Certifique-se que o servidor está rodando (`npm start`)
-- Abra `qrcode.html` no navegador
-- Ou acesse manualmente: copie o link `http://[IP]:3000` e envie para o celular
-
-### Problema: Ranking não atualiza
-**Solução**:
-- Atualize a página (F5 ou Cmd + R)
-- O ranking atualiza automaticamente a cada 10 segundos
-
-### Problema: Erro ao instalar dependências
-**Solução**:
-```bash
-# Limpe o cache e reinstale
-npm cache clean --force
-rm -rf node_modules
-npm install
-```
-
----
-
-## 🎨 Customização
-
-### Mudar Cores
-
-Edite `public/index.html`, procure por:
-
-```css
-:root {
-  --primary: #0066FF;    /* Azul principal */
-  --secondary: #00D9FF;  /* Ciano */
-  --accent: #8B00FF;     /* Roxo */
+```javascript
+async function generateQRCode() {
+  const url = 'https://sistema-escape-es-ufmg.onrender.com';
+  // ...
 }
 ```
 
-### Mudar Tempo dos Desafios
+### Servidor Não Inicia
 
-Em `public/index.html`, procure:
+**Problema:** Porta já em uso
 
-```javascript
-let challengeTime = 60; // Tempo em segundos por desafio
-```
-
-### Adicionar Mais Perguntas
-
-Edite os desafios no `index.html` (procure por `<!-- DESAFIO 1 -->`, etc.)
-
-### Mudar Porta do Servidor
-
-Em `server.js`:
-
-```javascript
-const PORT = 3000; // Mude para 8080, 3001, etc.
-```
-
----
-
-## 📊 Painel Administrativo
-
-Acesse `http://localhost:3000/admin` para ver:
-
-- 📈 Total de participantes
-- 🏆 Top 10 geral e do dia
-- ⏱️ Tempo médio de conclusão
-- 📊 Pontuação média
-- 🎯 Distribuição de perfis de engenheiro
-
-**Atualização automática a cada 30 segundos!**
-
----
-
-## 🚀 Comandos Rápidos
-
+**Solução:**
 ```bash
-# Instalar dependências
-npm install
+# Matar processo na porta 3000 (Linux/Mac)
+lsof -ti:3000 | xargs kill -9
 
-# Iniciar servidor
-npm start
-
-# Parar servidor
-Ctrl + C (ou Cmd + C no Mac)
-
-# Ver ajuda
-npm help
+# Windows
+netstat -ano | findstr :3000
+taskkill /PID [NUMERO] /F
 ```
 
+### Deploy Falhou no Render
 
-### Problemas Técnicos Comuns
+**Causa comum:** `package.json` incorreto
 
-1. **Servidor travou**: Pressione Ctrl+C e digite `npm start` novamente
-2. **Muitos acessos simultâneos**: Normal! O sistema aguenta até 50 pessoas ao mesmo tempo
-3. **Celular lento**: Peça para fechar outros apps
-
----
-
-## 🎓 Créditos
-
-**Desenvolvido por:**
-- Luana Ferreira (2025116670)
-- Fernanda Souza Siqueira (2025113484)
-- Milena Flávia (2025075086)
-
-**Curso:** Engenharia de Sistemas - UFMG  
-**Evento:** Mostra de Profissões UFMG 2025  
-**Licença:** MIT (uso livre para fins educacionais)
-
----
-
-## 🌟 Boas Práticas
-
-### Antes da Mostra
-- ✅ Teste com amigos/família
-- ✅ Imprima vários QR Codes
-- ✅ Tenha backup de energia (notebook + power bank)
-- ✅ Configure luzes e música ambiente
-
-### Durante a Mostra
-- ✅ Mantenha o painel admin aberto
-- ✅ Celebre recordes no ranking
-- ✅ Tire fotos dos participantes
-- ✅ Incentive compartilhamento nas redes sociais
-
-### Depois da Mostra
-- ✅ Salve os dados do ranking (copie da tela admin)
-- ✅ Colete feedback dos participantes
-- ✅ Compartilhe estatísticas nas redes do curso
-
----
-
-## 🎯 Checklist Pré-Evento
-
-```
-[ ] Node.js instalado
-[ ] Dependências instaladas (npm install)
-[ ] Servidor testado (npm start)
-[ ] QR Code impresso
-[ ] Rede WiFi funcionando
-[ ] TV/Projetor configurado
-[ ] Monitores treinados
-[ ] Backup de energia disponível
-[ ] Cartazes e decoração prontos
-[ ] Instagram @es.ufmg divulgado
-[ ] Certificados testados
-[ ] Ranking zerado do dia anterior
+**Solução:** Verificar se tem:
+```json
+{
+  "scripts": {
+    "start": "node server.js"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}
 ```
 
 ---
 
-**🎮 Boa Mostra de Profissões! Vamos mostrar que Engenharia de Sistemas é o futuro! 🚀**
+## 📈 Métricas Esperadas
+
+### Participação
+- **80-150 participantes/dia** durante a Mostra
+- **Taxa de conclusão > 90%**
+- **Tempo médio: 5-7 minutos**
+
+### Engajamento
+- **30-40% compartilham** certificado nas redes
+- **15-25% buscam mais informações** sobre o curso
+- **Satisfação > 4.5/5**
+
+---
+
+## 👥 Equipe de Desenvolvimento
+
+| Nome | Matrícula | Contato |
+|------|-----------|---------|
+| **Luana Ferreira** | 2025116670 | [GitHub](#) |
+| **Fernanda Souza Siqueira** | 2025113484 | [GitHub](#) |
+| **Milena Flávia** | 2025075086 | [GitHub](#) |
+
+### Orientação
+- **Curso:** Engenharia de Sistemas - UFMG
+- **Evento:** Mostra de Profissões UFMG 2025
+- **Disciplina:** [Nome da Disciplina]
+
+---
+
+## 📱 Redes Sociais
+
+Siga a Engenharia de Sistemas UFMG:
+
+- **Instagram:** [@es.ufmg](https://instagram.com/es.ufmg)
+- **Site:** [sistemas.ufmg.br](https://sistemas.ufmg.br)
+- **Email:** contato.es@ufmg.br
+
+---
+
+## 📄 Licença
+
+Este projeto está sob a licença **MIT** - veja o arquivo [LICENSE](LICENSE) para detalhes.
+
+**Uso livre para fins educacionais e não comerciais.**
+
+---
+
+## 🙏 Agradecimentos
+
+- **UFMG** - Pela infraestrutura e apoio
+- **Coordenação de ES** - Pela orientação
+- **Participantes da Mostra** - Pelo feedback
+- **Comunidade Open Source** - Pelas ferramentas utilizadas
+
+---
+
+## 🚀 Próximos Passos
+
+### Melhorias Futuras
+
+- [ ] Sistema de badges e conquistas
+- [ ] Modo multiplayer (competição em tempo real)
+- [ ] Integração com banco de dados persistente
+- [ ] Dashboard avançado com gráficos
+- [ ] Versão mobile nativa (React Native)
+- [ ] Suporte a múltiplos idiomas
+- [ ] Sistema de hints progressivos
+
+### Versões Planejadas
+
+- **v1.0** (Atual) - MVP para Mostra de Profissões
+- **v1.1** - Sistema de persistência de dados
+- **v2.0** - Multiplayer e novos desafios
+- **v3.0** - Aplicativo mobile
+
+---
+
+## 📞 Suporte e Contato
+
+### Durante a Mostra de Profissões
+
+**Suporte Técnico:**
+- Monitores na sala
+- Painel admin: `/admin`
+
+### Pós-Evento
+
+**Reportar Bugs:**
+- Abrir issue no GitHub
+- Email: contato.es@ufmg.br
+
+**Sugestões:**
+- Pull requests são bem-vindos!
+- Discussões na aba Issues
+
+---
+
+## 🌟 Contribuindo
+
+Contribuições são muito bem-vindas! Para contribuir:
+
+1. **Fork** o projeto
+2. Crie uma **branch** para sua feature (`git checkout -b feature/NovaFuncionalidade`)
+3. **Commit** suas mudanças (`git commit -m 'Adiciona nova funcionalidade'`)
+4. **Push** para a branch (`git push origin feature/NovaFuncionalidade`)
+5. Abra um **Pull Request**
+
+### Diretrizes
+
+- Manter código limpo e documentado
+- Seguir padrões de ES6+
+- Testar antes de submeter
+- Atualizar documentação quando necessário
+
+---
+
+## 📚 Documentação Adicional
+
+- [DEPLOY_RENDER.md](docs/DEPLOY_RENDER.md) - Guia completo de deploy
+- [CORRIGIR_QR_CODE.md](docs/CORRIGIR_QR_CODE.md) - Como corrigir URL do QR
+- [TUTORIAL_GITHUB.md](docs/TUTORIAL_GITHUB.md) - Como usar GitHub
+- [CHECKLIST_EVENTO.html](docs/CHECKLIST_EVENTO.html) - Checklist para impressão
+
+---
+
+## 💡 FAQ
+
+### Por que Engenharia de Sistemas?
+
+Engenharia de Sistemas é a área que integra tecnologia, gestão e pessoas para resolver problemas complexos do mundo real. É o "cérebro" por trás de sistemas que usamos todos os dias!
+
+### Quanto tempo leva para completar?
+
+Em média, 5-7 minutos. Mas não se preocupe - é divertido e rápido!
+
+### Preciso saber programar?
+
+Não! O jogo é acessível para qualquer pessoa. Os desafios testam raciocínio lógico e pensamento sistêmico, não conhecimento técnico.
+
+### Posso jogar mais de uma vez?
+
+Sim! Tente melhorar sua pontuação e alcançar o topo do ranking.
+
+### O certificado é oficial?
+
+É um certificado de participação educacional. Não substitui certificação profissional, mas é ótimo para compartilhar nas redes sociais!
+
+---
+
+## 🎉 Estatísticas do Projeto
+
+![GitHub stars](https://img.shields.io/github/stars/SEU-USUARIO/sistema-escape-es-ufmg?style=social)
+![GitHub forks](https://img.shields.io/github/forks/SEU-USUARIO/sistema-escape-es-ufmg?style=social)
+![GitHub watchers](https://img.shields.io/github/watchers/SEU-USUARIO/sistema-escape-es-ufmg?style=social)
+
+---
+
+<div align="center">
+
+**⭐ Se este projeto ajudou você, considere dar uma estrela no GitHub! ⭐**
+
+**Desenvolvido com 💙 por estudantes de Engenharia de Sistemas da UFMG**
+
+[🎮 Jogar Agora](https://sistema-escape-es-ufmg.onrender.com) • [📱 Ver QR Code](https://sistema-escape-es-ufmg.onrender.com/qrcode.html) • [📊 Painel Admin](https://sistema-escape-es-ufmg.onrender.com/admin)
+
+**Mostra de Profissões UFMG 2025**
+
+</div>
